@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Heart Disease Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+
+    .result {
+      max-width: 600px;
+      margin: 20px auto;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Heart Disease Prediction</h1>
+  <form id="prediction-form">
+    <label for="age">Age</label>
+    <input type="number" id="age" required>
+
+    <label for="sex">Sex (1 = Male, 0 = Female)</label>
+    <input type="number" id="sex" required>
+
+    <label for="cp">Chest Pain Type (0–3)</label>
+    <input type="number" id="cp" required>
+
+    <label for="trestbps">Resting Blood Pressure</label>
+    <input type="number" id="trestbps" required>
+
+    <label for="chol">Cholesterol</label>
+    <input type="number" id="chol" required>
+
+    <label for="fbs">Fasting Blood Sugar (> 120 mg/dl, 1 = true; 0 = false)</label>
+    <input type="number" id="fbs" required>
+
+    <label for="restecg">Resting ECG Results</label>
+    <input type="number" id="restecg" required>
+
+    <label for="thalach">Max Heart Rate Achieved</label>
+    <input type="number" id="thalach" required>
+
+    <label for="exang">Exercise Induced Angina (1 = yes; 0 = no)</label>
+    <input type="number" id="exang" required>
+
+    <label for="oldpeak">ST Depression</label>
+    <input type="number" step="0.1" id="oldpeak" required>
+
+    <label for="slope">Slope of the Peak Exercise ST Segment</label>
+    <input type="number" id="slope" required>
+
+    <label for="ca">Number of Major Vessels Colored by Fluoroscopy (0–3)</label>
+    <input type="number" id="ca" required>
+
+    <label for="thal">Thal (1 = normal; 2 = fixed defect; 3 = reversable defect)</label>
+    <input type="number" id="thal" required>
+
+    <button type="submit">Predict</button>
+  </form>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    document.getElementById("prediction-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const values = [
+        Number(document.getElementById("age").value),
+        Number(document.getElementById("sex").value),
+        Number(document.getElementById("cp").value),
+        Number(document.getElementById("trestbps").value),
+        Number(document.getElementById("chol").value),
+        Number(document.getElementById("fbs").value),
+        Number(document.getElementById("restecg").value),
+        Number(document.getElementById("thalach").value),
+        Number(document.getElementById("exang").value),
+        parseFloat(document.getElementById("oldpeak").value),
+        Number(document.getElementById("slope").value),
+        Number(document.getElementById("ca").value),
+        Number(document.getElementById("thal").value)
+      ];
+
+      // Send to backend (replace with your Python server endpoint)
+      const response = await fetch("http://localhost:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ values: values })
+      });
+
+      const result = await response.json();
+      document.getElementById("result").innerText = "Prediction: " + JSON.stringify(result);
+    });
+  </script>
+</body>
+</html>
